@@ -1,9 +1,9 @@
 #include <stdio.h>
 
 int main(int argc, char **argv) {
-  if (argc != 2) {
-    fprintf(stderr, "Load failed\n");
-    return 1;
+  if (argc == 1) {
+    printf("Sweet BASIC v0.0.1\n");
+    return 0;
   }
 
   FILE *fp;
