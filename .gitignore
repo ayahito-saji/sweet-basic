@@ -1,1 +1,6 @@
 bin/*
+*.log
+.vagrant/
+.idea/
+.DS_Store
+Thumbs.sb
