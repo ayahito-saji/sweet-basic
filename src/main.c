@@ -14,13 +14,12 @@ int main(int argc, char **argv) {
     printf("Load failed\n");
     return 1;
   }
-  
+
   extern int yyparse(void);
   extern FILE *yyin;
   yyin = fp;
   if (yyparse()) {
-    fprintf(stderr, "Error ! Error ! Error !\n");
-    exit(1);
+    printf("SyntaxError\n");
   }
 
   fclose(fp);

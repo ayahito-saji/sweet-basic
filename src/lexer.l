@@ -7,11 +7,13 @@ int yywrap(void) {
 }
 %}
 %%
-"+"		return ADD;
-"-"		return SUB;
-"*"		return MUL;
-"/"		return DIV;
-"\n"		return CR;
+"+"   return '+';
+"-"   return '-';
+"*"   return '*';
+"/"   return '/';
+"\n"  return CR;
+"("   return '(';
+")"   return ')';
 [1-9][0-9]* {
   double temp;
   sscanf(yytext, "%lf", &temp);

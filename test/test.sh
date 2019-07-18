@@ -6,14 +6,16 @@ try () {
   actual=$( ./bin/sbas "$input" )
 
   if [ "$actual" = "$expected" ]; then
-    echo "$input => $actual"
+    echo "$input => $actual OK!"
   else
     echo "$input => $expected expected, but got $actual"
     exit 1
   fi
 }
 
-try 1+4-5 ./test/sample0.sbas
-try -1+7-3 ./test/sample1.sbas
+try 0 ./test/sample0.sbas
+try 3 ./test/sample1.sbas
+try "SyntaxError" ./test/sample2.sbas
+try -9 ./test/sample3.sbas
 
-echo "OK"
+echo "ALL TEST PASSED!!"
