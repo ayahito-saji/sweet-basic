@@ -1,18 +1,18 @@
 build: ./bin ./bin/main.o ./bin/parser.o ./bin/lexer.o
-	cc -o ./bin/sbas ./bin/main.o
-	cc -o ./bin/parser ./bin/parser.o ./bin/lexer.o
+	gcc -o ./bin/sbas ./bin/main.o
+	gcc -o ./bin/parser ./bin/parser.o ./bin/lexer.o
 
 ./bin:
 	mkdir ./bin
 
 ./bin/main.o: ./src/main.c
-	cc -c -O0 -o ./bin/main.o ./src/main.c
+	gcc -c -O0 -o ./bin/main.o ./src/main.c
 
 ./bin/parser.o: ./src/y.tab.c
-	cc -c -O0 -o ./bin/parser.o ./src/y.tab.c
+	gcc -c -O0 -o ./bin/parser.o ./src/y.tab.c
 
 ./bin/lexer.o: ./src/lex.yy.c
-	cc -c -O0 -o ./bin/lexer.o ./src/lex.yy.c
+	gcc -c -O0 -o ./bin/lexer.o ./src/lex.yy.c
 
 ./src/y.tab.c: ./src/parser.y
 	yacc -o ./src/y.tab.c -d ./src/parser.y
