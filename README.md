@@ -5,6 +5,8 @@ Sweet BASIC is a programming language being compatible with Smile BASIC 2.* (Smi
 ## Require Software
 * gcc
 * make
+* bison(yacc)
+* flex(lex)
 
 ## Build
 ```
