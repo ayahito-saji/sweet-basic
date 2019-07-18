@@ -5,10 +5,12 @@ try () {
   input="$2"
   actual=$( ./bin/sbas "$input" )
 
+    echo "$input"
+    cat $input
   if [ "$actual" = "$expected" ]; then
-    echo "$input => $actual OK!"
+    echo "=> $actual OK!"
   else
-    echo "$input => $expected expected, but got $actual"
+    echo "=> $expected expected, but got $actual ERROR!"
     exit 1
   fi
 }
