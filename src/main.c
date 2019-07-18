@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "./y.tab.h"
 
 int main(int argc, char **argv) {
   if (argc == 1) {
@@ -13,10 +14,15 @@ int main(int argc, char **argv) {
     printf("Load failed\n");
     return 1;
   }
-
-  while ((chr = fgetc(fp)) != EOF) {
-    printf("%c", chr);
+  
+  extern int yyparse(void);
+  extern FILE *yyin;
+  yyin = fp;
+  if (yyparse()) {
+    fprintf(stderr, "Error ! Error ! Error !\n");
+    exit(1);
   }
+
   fclose(fp);
 
   return 0;

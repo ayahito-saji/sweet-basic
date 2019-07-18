@@ -1,18 +1,19 @@
+CC = cc
+
 build: ./bin ./bin/main.o ./bin/parser.o ./bin/lexer.o
-	gcc -o ./bin/sbas ./bin/main.o
-	gcc -o ./bin/parser ./bin/parser.o ./bin/lexer.o
+	$(CC) -o ./bin/sbas ./bin/main.o ./bin/parser.o ./bin/lexer.o
 
 ./bin:
 	mkdir ./bin
 
 ./bin/main.o: ./src/main.c
-	gcc -c -O0 -o ./bin/main.o ./src/main.c
+	$(CC) -c -O0 -o ./bin/main.o ./src/main.c
 
 ./bin/parser.o: ./src/y.tab.c
-	gcc -c -O0 -o ./bin/parser.o ./src/y.tab.c
+	$(CC) -c -O0 -o ./bin/parser.o ./src/y.tab.c
 
 ./bin/lexer.o: ./src/lex.yy.c
-	gcc -c -O0 -o ./bin/lexer.o ./src/lex.yy.c
+	$(CC) -c -O0 -o ./bin/lexer.o ./src/lex.yy.c
 
 ./src/y.tab.c: ./src/parser.y
 	yacc -o ./src/y.tab.c -d ./src/parser.y
