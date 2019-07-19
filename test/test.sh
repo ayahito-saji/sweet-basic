@@ -19,5 +19,6 @@ try 0 ./test/sample0.sbas
 try 3 ./test/sample1.sbas
 try "SyntaxError" ./test/sample2.sbas
 try -9 ./test/sample3.sbas
+try 5.5 ./test/sample4.sbas
 
 echo "ALL TEST PASSED!!"

@@ -1,15 +1,36 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "./y.tab.h"
+#define VERSION "0.0.1"
 
 int main(int argc, char **argv) {
-  if (argc == 1) {
-    printf("Sweet BASIC v0.0.1\n");
-    return 0;
+  char *fileName;
+
+  int i;
+  char option;
+  for(i=1;i<argc;i++){
+    if (*argv[i] == '-') {
+      option = *(argv[i]+1);
+      if (option == 'v' || strcmp(argv[i], "--version")==0) {
+        printf("SWEET BASIC v%s\n", VERSION);
+        exit(0);
+      } else if (option == 'h' || strcmp(argv[i], "--help")==0) {
+        printf("SWEET BASIC v%s\n", VERSION);
+        printf("\n");
+        printf("Arguments:\n");
+        printf("  -h or --help         Print Help message and exit\n");
+        printf("  -v or --version      Print version information and exit\n");
+        exit(0);
+      }
+    } else {
+      fileName = argv[i];
+    }
   }
 
   FILE *fp;
   int chr;
-  fp = fopen(argv[1], "r");
+  fp = fopen(fileName, "r");
   if (fp == NULL) {
     printf("Load failed\n");
     return 1;
