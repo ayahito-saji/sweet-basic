@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
   extern FILE *yyin;
   yyin = fp;
   if (yyparse()) {
-    printf("SyntaxError\n");
+    printf("Syntax error\n");
   }
 
   fclose(fp);
