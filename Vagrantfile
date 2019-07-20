@@ -10,5 +10,6 @@ Vagrant.configure("2") do |config|
     sudo apt install -y flex
     echo 'export PATH="/vagrant/bin:$PATH"' >> ~/.bash_profile
     source ~/.bash_profile
+    ln -s /vagrant
   SHELL
 end
