@@ -17,8 +17,10 @@ try () {
 
 try 0 ./test/sample0.sbas
 try 3 ./test/sample1.sbas
-try "SyntaxError" ./test/sample2.sbas
+try "Syntax error" ./test/sample2.sbas
 try -9 ./test/sample3.sbas
 try 5.5 ./test/sample4.sbas
+try 524287 ./test/sample5.sbas
+try "Overflow" ./test/sample6.sbas
 
 echo "ALL TEST PASSED!!"
