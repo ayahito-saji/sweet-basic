@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include "node.h"
+#include "ast.h"
 #include "y.tab.h"
 #define VERSION "0.0.1"
 
@@ -52,11 +52,11 @@ int main(int argc, char **argv) {
   if (yyparse()) {
     printf("Syntax error\n");
   } else {
-    extern struct node *root;
+    extern struct astnode *root;
     if (root) {
       if (debug) {
         printf("- Done syntax parse\n");
-        viewTree(root, 0);
+        view_ast(root, 0);
       }
     }
   }

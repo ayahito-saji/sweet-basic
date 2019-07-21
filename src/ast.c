@@ -1,13 +1,13 @@
-#include "node.h"
+#include "ast.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
 
-struct node *root;
+struct astnode *root;
 
-struct node *tree(char type, struct node *left, struct node *right) {
-  struct node *p = (struct node*) malloc((int) sizeof(struct node));
+struct astnode *astnode_tree(char type, struct astnode *left, struct astnode *right) {
+  struct astnode *p = (struct astnode*) malloc((int) sizeof(struct astnode));
   p->type = type;
   p->left = left;
   p->right = right;
@@ -15,16 +15,16 @@ struct node *tree(char type, struct node *left, struct node *right) {
   return p;
 }
 
-struct node *num(double val) {
-  struct node *p = (struct node*) malloc((int) sizeof(struct node));
+struct astnode *astnode_num(double val) {
+  struct astnode *p = (struct astnode*) malloc((int) sizeof(struct astnode));
   p->type = 'n';
   p->num = (int) (val * (1 << 12));
   root = p;
   return p;
 }
 
-void viewTree (struct node *tree, int indent) {
-  if (tree->left) viewTree(tree->left, indent + 2);
+void view_ast (struct astnode *tree, int indent) {
+  if (tree->left) view_ast(tree->left, indent + 2);
 
   if (tree->type == 'n') {
     char c, str[256];
@@ -42,5 +42,5 @@ void viewTree (struct node *tree, int indent) {
   else
     printf("%*s%c\n", indent, "", tree->type);
 
-  if (tree->right) viewTree(tree->right, indent + 2);
+  if (tree->right) view_ast(tree->right, indent + 2);
 }

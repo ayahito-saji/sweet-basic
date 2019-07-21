@@ -2,11 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define YYDEBUG 1
-#include "node.h"
+#include "ast.h"
 
 %}
 %union {
-  struct node *node;
+  struct astnode *node;
 }
 %token <node> LITERAL
 %token <node> '+' '-' '*' '/' CR '(' ')'
@@ -14,21 +14,21 @@
 %%
 statements
     : statement
-    | statements statement { $$ = tree('s', $1, $2); }
+    | statements statement { $$ = astnode_tree('s', $1, $2); }
     ;
 statement
     : expression CR
     ;
 expression
     : term
-    | '-' term { $$ = tree('-', num(0.0), $2); }
-    | expression '+' term { $$ = tree('+', $1, $3); }
-    | expression '-' term { $$ = tree('-', $1, $3); }
+    | '-' term { $$ = astnode_tree('-', astnode_num(0.0), $2); }
+    | expression '+' term { $$ = astnode_tree('+', $1, $3); }
+    | expression '-' term { $$ = astnode_tree('-', $1, $3); }
     ;
 term
     : primary_expression
-    | term '*' primary_expression { $$ = tree('*', $1, $3); }
-    | term '/' primary_expression { $$ = tree('/', $1, $3); }
+    | term '*' primary_expression { $$ = astnode_tree('*', $1, $3); }
+    | term '/' primary_expression { $$ = astnode_tree('/', $1, $3); }
     ;
 primary_expression
     : LITERAL
