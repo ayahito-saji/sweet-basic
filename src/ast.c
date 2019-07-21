@@ -33,7 +33,7 @@ struct astnode *astnode_num(double val) {
     root = p;
     return p;
   } else {
-    printf("Overflow(%d)", astline);
+    printf("Overflow(%d)\n", astline);
     exit(1);
   }
 }
