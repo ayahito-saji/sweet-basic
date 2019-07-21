@@ -3,30 +3,10 @@
 #include <stdlib.h>
 #include <math.h>
 #include "node.h"
-#include "./y.tab.h"
+#include "y.tab.h"
 #define VERSION "0.0.1"
 
-void viewTree (struct node *tree, int indent) {
-  if (tree->left) viewTree(tree->left, indent + 2);
-
-  if (tree->type == 'n') {
-    char c, str[256];
-    int i, len;
-    sprintf(str, "%.3f", round(tree->num / (4.096))/1000.0);
-    len = strlen(str);
-    for (i=len-1; i>=0; i--) {
-      c = *(str + i);
-      if (c == '0') { *(str + i) = '\0'; }
-      else if (c == '.') { *(str + i) = '\0';break; }
-      else { break; }
-    }
-    printf("%*s%s\n", indent, "", str);
-  }
-  else
-    printf("%*s%c\n", indent, "", tree->type);
-
-  if (tree->right) viewTree(tree->right, indent + 2);
-}
+int debug = 0;
 
 int main(int argc, char **argv) {
   char *fileName;
@@ -46,11 +26,16 @@ int main(int argc, char **argv) {
         printf("  -h or --help         Print Help message and exit\n");
         printf("  -v or --version      Print version information and exit\n");
         exit(0);
+      } else if (option == 'd' || strcmp(argv[i], "--debug")==0) {
+        debug = 1;
       }
     } else {
       fileName = argv[i];
     }
   }
+
+  if (debug) printf("DEBUG MODE: %d\n", debug);
+
 
   FILE *fp;
   int chr;
@@ -66,9 +51,15 @@ int main(int argc, char **argv) {
   yyin = fp;
   if (yyparse()) {
     printf("Syntax error\n");
+  } else {
+    extern struct node *root;
+    if (root) {
+      if (debug) {
+        printf("- Done syntax parse\n");
+        viewTree(root, 0);
+      }
+    }
   }
-  extern struct node *root;
-  viewTree(root, 0);
 
   fclose(fp);
 

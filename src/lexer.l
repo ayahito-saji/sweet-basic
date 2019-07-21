@@ -18,19 +18,13 @@ int yywrap(void) {
 [0-9]+ {
   double temp;
   sscanf(yytext, "%lf", &temp);
-  struct node *p = (struct node*) malloc((int) sizeof(struct node));
-  p->type = 'n';
-  p->num = (int) (temp * (1 << 12));
-  yylval.node = p;
+  yylval.node = num(temp);
   return LITERAL;
 }
 [0-9]*\.[0-9]* {
   double temp;
   sscanf(yytext, "%lf", &temp);
-  struct node *p = (struct node*) malloc((int) sizeof(struct node));
-  p->type = 'n';
-  p->num = (int) (temp * (1 << 12));
-  yylval.node = p;
+  yylval.node = num(temp);
   return LITERAL;
 }
 %%

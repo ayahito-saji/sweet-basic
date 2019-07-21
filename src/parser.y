@@ -4,15 +4,6 @@
 #define YYDEBUG 1
 #include "node.h"
 
-struct node *tree(char type, struct node *left, struct node *right) {
-  struct node *p = (struct node*) malloc((int) sizeof(struct node));
-  p->type = type;
-  p->left = left;
-  p->right = right;
-  root = p;
-  return p;
-}
-
 %}
 %union {
   struct node *node;
@@ -30,6 +21,7 @@ statement
     ;
 expression
     : term
+    | '-' term { $$ = tree('-', num(0.0), $2); }
     | expression '+' term { $$ = tree('+', $1, $3); }
     | expression '-' term { $$ = tree('-', $1, $3); }
     ;
@@ -40,6 +32,7 @@ term
     ;
 primary_expression
     : LITERAL
+    | '(' expression ')' { $$ = $2; }
     ;
 %%
 int yyerror(char const *str) {
