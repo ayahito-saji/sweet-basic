@@ -1,51 +1,45 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <math.h>
 #define YYDEBUG 1
+#include "node.h"
+
+struct node *tree(char type, struct node *left, struct node *right) {
+  struct node *p = (struct node*) malloc((int) sizeof(struct node));
+  p->type = type;
+  p->left = left;
+  p->right = right;
+  root = p;
+  return p;
+}
 
 %}
 %union {
-  int number_value;
+  struct node *node;
 }
-%token <number_value> NUMBER_LITERAL
-%token '+' '-' '*' '/' CR '(' ')'
-%type <number_value> expression term primary_expression
+%token <node> LITERAL
+%token <node> '+' '-' '*' '/' CR '(' ')'
+%type <node> statements statement expression term primary_expression
 %%
-line_list
-    : line
-    | line_list line
+statements
+    : statement
+    | statements statement { $$ = tree('s', $1, $2); }
     ;
-line
-    : expression CR {
-      char c, str[256];
-      int i, len;
-      sprintf(str, "%.3f", round($1 / (4.096))/1000.0);
-      len = strlen(str);
-      for (i=len-1; i>=0; i--) {
-        c = *(str + i);
-        if (c == '0') { *(str + i) = '\0'; }
-        else if (c == '.') { *(str + i) = '\0';break; }
-        else { break; }
-      }
-      printf("%s\n", str);
-    }
+statement
+    : expression CR
     ;
 expression
     : term
-    | expression '+' term { $$ = $1 + $3; }
-    | expression '-' term { $$ = $1 - $3; }
-    | '-' term { $$ = -$2; }
+    | expression '+' term { $$ = tree('+', $1, $3); }
+    | expression '-' term { $$ = tree('-', $1, $3); }
     ;
 term
     : primary_expression
-    | term '*' primary_expression { $$ = (($1 * $3) >> 12); }
-    | term '/' primary_expression { $$ = (($1 / $3) >> 12); }
+    | term '*' primary_expression { $$ = tree('*', $1, $3); }
+    | term '/' primary_expression { $$ = tree('/', $1, $3); }
     ;
 primary_expression
-    : NUMBER_LITERAL
-    | '(' expression ')' { $$ = $2; }
+    : LITERAL
     ;
 %%
 int yyerror(char const *str) {

@@ -1,8 +1,32 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
+#include "node.h"
 #include "./y.tab.h"
 #define VERSION "0.0.1"
+
+void viewTree (struct node *tree, int indent) {
+  if (tree->left) viewTree(tree->left, indent + 2);
+
+  if (tree->type == 'n') {
+    char c, str[256];
+    int i, len;
+    sprintf(str, "%.3f", round(tree->num / (4.096))/1000.0);
+    len = strlen(str);
+    for (i=len-1; i>=0; i--) {
+      c = *(str + i);
+      if (c == '0') { *(str + i) = '\0'; }
+      else if (c == '.') { *(str + i) = '\0';break; }
+      else { break; }
+    }
+    printf("%*s%s\n", indent, "", str);
+  }
+  else
+    printf("%*s%c\n", indent, "", tree->type);
+
+  if (tree->right) viewTree(tree->right, indent + 2);
+}
 
 int main(int argc, char **argv) {
   char *fileName;
@@ -38,10 +62,13 @@ int main(int argc, char **argv) {
 
   extern int yyparse(void);
   extern FILE *yyin;
+
   yyin = fp;
   if (yyparse()) {
     printf("Syntax error\n");
   }
+  extern struct node *root;
+  viewTree(root, 0);
 
   fclose(fp);
 

@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include "y.tab.h"
+#include "node.h"
 
 int yywrap(void) {
   return 1;
@@ -17,13 +18,19 @@ int yywrap(void) {
 [0-9]+ {
   double temp;
   sscanf(yytext, "%lf", &temp);
-  yylval.number_value = (int) (temp * (1 << 12));
-  return NUMBER_LITERAL;
+  struct node *p = (struct node*) malloc((int) sizeof(struct node));
+  p->type = 'n';
+  p->num = (int) (temp * (1 << 12));
+  yylval.node = p;
+  return LITERAL;
 }
 [0-9]*\.[0-9]* {
   double temp;
   sscanf(yytext, "%lf", &temp);
-  yylval.number_value = (int) (temp * (1 << 12));
-  return NUMBER_LITERAL;
+  struct node *p = (struct node*) malloc((int) sizeof(struct node));
+  p->type = 'n';
+  p->num = (int) (temp * (1 << 12));
+  yylval.node = p;
+  return LITERAL;
 }
 %%
