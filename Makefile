@@ -1,6 +1,6 @@
 CC = cc
 
-build: ./bin ./bin/main.o ./bin/parser.o ./bin/lexer.o ./bin/ast.o
+build: ./bin ./bin/parser.o ./bin/lexer.o ./bin/ast.o ./bin/main.o
 	$(CC) -o ./bin/sbas ./bin/main.o ./bin/parser.o ./bin/lexer.o ./bin/ast.o -lm
 
 ./bin:
@@ -28,6 +28,8 @@ build: ./bin ./bin/main.o ./bin/parser.o ./bin/lexer.o ./bin/ast.o
 
 clean:
 	rm -rf ./bin/*.o
+	rm -rf ./src/lex.yy.c
+	rm -rf ./src/y.tab.*
 
 test: ./bin/sbas
 	sh ./test/test.sh
