@@ -4,6 +4,8 @@
 #define YYDEBUG 1
 #include "ast.h"
 
+unsigned int astline = 1;
+
 %}
 %union {
   struct astnode *node;
@@ -13,9 +15,9 @@
 %type <node> statements statement expression term primary_expression
 %%
 statements
-    : statement CR
+    : statement CR { astline ++; }
     | statement ':'
-    | statements statement CR { $$ = astnode_tree(STATEMENTS, $1, $2); }
+    | statements statement CR { $$ = astnode_tree(STATEMENTS, $1, $2); astline ++; }
     | statements statement ':' { $$ = astnode_tree(STATEMENTS, $1, $2); }
     ;
 statement

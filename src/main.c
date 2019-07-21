@@ -50,7 +50,8 @@ int main(int argc, char **argv) {
 
   yyin = fp;
   if (yyparse()) {
-    printf("Syntax error\n");
+    extern unsigned int astline;
+    printf("Syntax error(%d)\n", astline);
     exit(1);
   }
   extern struct astnode *root;

@@ -9,6 +9,7 @@
     char str[256];
     struct astnode *left;
     struct astnode *right;
+    unsigned int line;
   } *root;
 
   struct astnode *astnode_tree(enum asttype type, struct astnode *left, struct astnode *right);

@@ -8,6 +8,7 @@ int yywrap(void) {
 }
 %}
 %%
+[ \t\r] {}
 "+" { return '+'; }
 "-" { return '-'; }
 "*" { return '*'; }

@@ -1,4 +1,5 @@
 #include "ast.h"
+#include "y.tab.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -11,18 +12,25 @@ struct astnode *astnode_tree(enum asttype type, struct astnode *left, struct ast
   if (left != NULL && right == NULL) return left;
   if (left == NULL && right != NULL) return right;
 
+  extern unsigned int astline;
+
   struct astnode *p = (struct astnode*) malloc((int) sizeof(struct astnode));
   p->type = type;
   p->left = left;
   p->right = right;
+  p->line = astline;
   root = p;
   return p;
 }
 
 struct astnode *astnode_num(double val) {
+
+  extern unsigned int astline;
+
   struct astnode *p = (struct astnode*) malloc((int) sizeof(struct astnode));
   p->type = NUMBER;
   p->num = (int) (val * (1 << 12));
+  p->line = astline;
   root = p;
   return p;
 }
@@ -44,19 +52,19 @@ void view_ast (struct astnode *tree, int indent) {
         else if (c == '.') { *(str + i) = '\0';break; }
         else { break; }
       }
-      printf("%s\n", str);
+      printf("%s(%d)\n", str, tree->line);
       break;
     case ADD:
-      printf("+\n");
+      printf("+(%d)\n", tree->line);
       break;
     case SUB:
-      printf("-\n");
+      printf("-(%d)\n", tree->line);
       break;
     case MUL:
-      printf("*\n");
+      printf("*(%d)\n", tree->line);
       break;
     case DIV:
-      printf("/\n");
+      printf("/(%d)\n", tree->line);
       break;
     case STATEMENTS:
       printf(":\n");
