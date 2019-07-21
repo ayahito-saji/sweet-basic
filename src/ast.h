@@ -13,6 +13,6 @@
 
   struct astnode *astnode_tree(enum asttype type, struct astnode *left, struct astnode *right);
   struct astnode *astnode_num(double val);
-  void viewTree (struct astnode *tree, int indent);
+  void view_ast (struct astnode *tree, int indent);
 
 #endif // _AST_H_

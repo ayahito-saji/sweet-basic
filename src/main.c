@@ -51,14 +51,14 @@ int main(int argc, char **argv) {
   yyin = fp;
   if (yyparse()) {
     printf("Syntax error\n");
-  } else {
-    extern struct astnode *root;
-    if (root) {
-      if (debug) {
-        printf("- Done syntax parse\n");
-        view_ast(root, 0);
-      }
-    }
+    exit(1);
+  }
+  extern struct astnode *root;
+  if (!root) exit(1);
+
+  if (debug) {
+    printf("- Done syntax parse\n");
+    view_ast(root, 0);
   }
 
   fclose(fp);
