@@ -9,15 +9,18 @@
   struct astnode *node;
 }
 %token <node> LITERAL
-%token <node> '+' '-' '*' '/' CR '(' ')'
+%token <node> '+' '-' '*' '/' CR '(' ')' ':'
 %type <node> statements statement expression term primary_expression
 %%
 statements
-    : statement
-    | statements statement { $$ = astnode_tree(STATEMENTS, $1, $2); }
+    : statement CR
+    | statement ':'
+    | statements statement CR { $$ = astnode_tree(STATEMENTS, $1, $2); }
+    | statements statement ':' { $$ = astnode_tree(STATEMENTS, $1, $2); }
     ;
 statement
-    : expression CR
+    : expression
+    | { $$ = NULL; }
     ;
 expression
     : term

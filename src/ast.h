@@ -1,7 +1,7 @@
 #ifndef _AST_H_
 #define _AST_H_
 
-  enum asttype { NUMBER, ADD, SUB, MUL, DIV, STATEMENTS };
+  enum asttype { NUMBER, ADD, SUB, MUL, DIV, STATEMENTS, PROGRAM };
 
   struct astnode {
     enum asttype type;

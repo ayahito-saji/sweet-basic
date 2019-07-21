@@ -7,6 +7,10 @@
 struct astnode *root;
 
 struct astnode *astnode_tree(enum asttype type, struct astnode *left, struct astnode *right) {
+  if (left == NULL && right == NULL) return NULL;
+  if (left != NULL && right == NULL) return left;
+  if (left == NULL && right != NULL) return right;
+
   struct astnode *p = (struct astnode*) malloc((int) sizeof(struct astnode));
   p->type = type;
   p->left = left;

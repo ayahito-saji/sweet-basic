@@ -15,6 +15,7 @@ int yywrap(void) {
 "\n" { return CR; }
 "(" { return '('; }
 ")" { return ')'; }
+":" { return ':'; }
 [0-9]+ {
   double temp;
   sscanf(yytext, "%lf", &temp);
