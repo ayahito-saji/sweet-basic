@@ -14,21 +14,21 @@
 %%
 statements
     : statement
-    | statements statement { $$ = astnode_tree('s', $1, $2); }
+    | statements statement { $$ = astnode_tree(STATEMENTS, $1, $2); }
     ;
 statement
     : expression CR
     ;
 expression
     : term
-    | '-' term { $$ = astnode_tree('-', astnode_num(0.0), $2); }
-    | expression '+' term { $$ = astnode_tree('+', $1, $3); }
-    | expression '-' term { $$ = astnode_tree('-', $1, $3); }
+    | '-' term { $$ = astnode_tree(SUB, astnode_num(0.0), $2); }
+    | expression '+' term { $$ = astnode_tree(ADD, $1, $3); }
+    | expression '-' term { $$ = astnode_tree(SUB, $1, $3); }
     ;
 term
     : primary_expression
-    | term '*' primary_expression { $$ = astnode_tree('*', $1, $3); }
-    | term '/' primary_expression { $$ = astnode_tree('/', $1, $3); }
+    | term '*' primary_expression { $$ = astnode_tree(MUL, $1, $3); }
+    | term '/' primary_expression { $$ = astnode_tree(DIV, $1, $3); }
     ;
 primary_expression
     : LITERAL
