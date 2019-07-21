@@ -24,15 +24,18 @@ struct astnode *astnode_tree(enum asttype type, struct astnode *left, struct ast
 }
 
 struct astnode *astnode_num(double val) {
-
   extern unsigned int astline;
-
-  struct astnode *p = (struct astnode*) malloc((int) sizeof(struct astnode));
-  p->type = NUMBER;
-  p->num = (int) (val * (1 << 12));
-  p->line = astline;
-  root = p;
-  return p;
+  if (val <= 524287 && val >= -524287) {
+    struct astnode *p = (struct astnode*) malloc((int) sizeof(struct astnode));
+    p->type = NUMBER;
+    p->num = (int) (val * (1 << 12));
+    p->line = astline;
+    root = p;
+    return p;
+  } else {
+    printf("Overflow(%d)", astline);
+    exit(1);
+  }
 }
 
 void view_ast (struct astnode *tree, int indent) {
