@@ -25,6 +25,7 @@ int main(int argc, char **argv) {
         printf("Arguments:\n");
         printf("  -h or --help         Print Help message and exit\n");
         printf("  -v or --version      Print version information and exit\n");
+        printf("  -d or --debug        Run in debug mode\n");
         exit(0);
       } else if (option == 'd' || strcmp(argv[i], "--debug")==0) {
         debug = 1;
