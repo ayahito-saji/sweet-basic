@@ -5,32 +5,42 @@
 #include <stdlib.h>
 #include <math.h>
 
-struct astnode *root;
+struct astnode *root = NULL;
+unsigned int astline = 1;
 
-struct astnode *astnode_tree(enum asttype type, struct astnode *left, struct astnode *right) {
-  if (left == NULL && right == NULL) return NULL;
-  if (left != NULL && right == NULL) return left;
-  if (left == NULL && right != NULL) return right;
-
-  extern unsigned int astline;
+struct astnode *astnode_new(enum asttype type) {
 
   struct astnode *p = (struct astnode*) malloc((int) sizeof(struct astnode));
   p->type = type;
-  p->left = left;
-  p->right = right;
+  p->child = NULL;
+  p->next = NULL;
   p->line = astline;
-  root = p;
+  // printf("新しいノード:%p %d\n", p, type);
   return p;
 }
 
+void astnode_add(struct astnode *parent, struct astnode *node) {
+  if (node == NULL) return;
+  // printf("子供の追加:%p -> %p\n", parent, node);
+  if (parent->child == NULL) {
+    /* first child */
+    parent->child = node;
+  } else {
+    struct astnode *last = parent->child;
+    while(last->next != NULL) last = last->next;
+    last->next = node;
+  }
+}
+
 struct astnode *astnode_num(double val) {
-  extern unsigned int astline;
   if (val <= 524287 && val >= -524287) {
     struct astnode *p = (struct astnode*) malloc((int) sizeof(struct astnode));
     p->type = NUMBER;
+    p->child = NULL;
+    p->next = NULL;
     p->num = (int) (val * (1 << 12));
     p->line = astline;
-    root = p;
+    // printf("新しいノード:%p %d %d\n", p, p->type, p->num);
     return p;
   } else {
     printf("Overflow(%d)\n", astline);
@@ -41,8 +51,6 @@ struct astnode *astnode_num(double val) {
 void view_ast (struct astnode *tree, int indent) {
   char c, str[256];
   int i, len;
-
-  if (tree->left) view_ast(tree->left, indent + 2);
 
   printf("%*s", indent, "");
   switch (tree->type) {
@@ -69,10 +77,19 @@ void view_ast (struct astnode *tree, int indent) {
     case DIV:
       printf("/(%d)\n", tree->line);
       break;
+    case STATEMENT:
+      printf(":(%d)\n", tree->line);
+      break;
     case STATEMENTS:
-      printf(":\n");
+      printf("¥n(%d)\n", tree->line);
+      break;
+    case PROGRAM:
+      printf("root\n");
       break;
   }
-
-  if (tree->right) view_ast(tree->right, indent + 2);
+  struct astnode *child = tree->child;
+  while (child != NULL) {
+    view_ast(child, indent + 2);
+    child = child->next;
+  }
 }

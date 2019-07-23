@@ -45,9 +45,7 @@ int main(int argc, char **argv) {
     printf("Load failed\n");
     return 1;
   }
-  /* check blank file */
-  if ((chr = fgetc(fp)) == EOF) exit(0); else ungetc(chr, fp);
-
+  
   extern int yyparse(void);
   extern FILE *yyin;
 
@@ -58,6 +56,7 @@ int main(int argc, char **argv) {
     exit(1);
   }
   extern struct astnode *root;
+  // printf("ルート:%p\n", root);
   if (!root) exit(1);
 
   if (debug) {

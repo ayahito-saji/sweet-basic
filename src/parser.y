@@ -4,7 +4,8 @@
 #define YYDEBUG 1
 #include "ast.h"
 
-unsigned int astline = 1;
+extern unsigned int astline;
+extern struct astnode *root;
 
 %}
 %union {
@@ -12,28 +13,36 @@ unsigned int astline = 1;
 }
 %token <node> LITERAL
 %token <node> '+' '-' '*' '/' CR '(' ')' ':'
-%type <node> statements statement expression term primary_expression
+%type <node> program statements statement instruction expression term primary_expression
 %%
+program
+    : { $$ = astnode_new(PROGRAM); root = $$; }
+    | statements { $$ = astnode_new(PROGRAM); astnode_add($$, $1); root = $$; }
+    ;
+
 statements
-    : statement CR { astline ++; }
-    | statement ':'
-    | statements statement CR { $$ = astnode_tree(STATEMENTS, $1, $2); astline ++; }
-    | statements statement ':' { $$ = astnode_tree(STATEMENTS, $1, $2); }
+    : { $$ = astnode_new(STATEMENTS); }
+    | statements statement CR { astnode_add($1, $2); $$ = $1; astline ++; }
     ;
 statement
-    : expression
-    | { $$ = NULL; }
+    : { $$ = NULL; }
+    | instruction { $$ = astnode_new(STATEMENT); astnode_add($$, $1);}
+    | statement ':' instruction { astnode_add($1, $3); }
+    ;
+instruction
+    : { $$ = NULL; }
+    | expression
     ;
 expression
     : term
-    | '-' term { $$ = astnode_tree(SUB, astnode_num(0.0), $2); }
-    | expression '+' term { $$ = astnode_tree(ADD, $1, $3); }
-    | expression '-' term { $$ = astnode_tree(SUB, $1, $3); }
+    | '-' term { $$ = astnode_new(SUB); astnode_add($$, astnode_num(0.0)); astnode_add($$, $2); }
+    | expression '+' term { $$ = astnode_new(ADD); astnode_add($$, $1); astnode_add($$, $3); }
+    | expression '-' term { $$ = astnode_new(SUB); astnode_add($$, $1); astnode_add($$, $3);}
     ;
 term
     : primary_expression
-    | term '*' primary_expression { $$ = astnode_tree(MUL, $1, $3); }
-    | term '/' primary_expression { $$ = astnode_tree(DIV, $1, $3); }
+    | term '*' primary_expression { $$ = astnode_new(MUL); astnode_add($$, $1); astnode_add($$, $3); }
+    | term '/' primary_expression { $$ = astnode_new(DIV); astnode_add($$, $1); astnode_add($$, $3); }
     ;
 primary_expression
     : LITERAL
