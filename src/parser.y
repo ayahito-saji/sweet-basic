@@ -16,17 +16,15 @@ extern struct astnode *root;
 %type <node> program statements statement instruction expression term primary_expression
 %%
 program
-    : { $$ = astnode_new(PROGRAM); root = $$; }
-    | statements { $$ = astnode_new(PROGRAM); astnode_add($$, $1); root = $$; }
+    : statements { $$ = astnode_new(PROGRAM); astnode_add($$, $1); root = $$; }
     ;
 
 statements
     : { $$ = astnode_new(STATEMENTS); }
-    | statements statement CR { astnode_add($1, $2); $$ = $1; astline ++; }
+    | statements statement CR { astnode_add($1, $2); astline ++; }
     ;
 statement
-    : { $$ = NULL; }
-    | instruction { $$ = astnode_new(STATEMENT); astnode_add($$, $1);}
+    : instruction { $$ = astnode_new(STATEMENT); astnode_add($$, $1);}
     | statement ':' instruction { astnode_add($1, $3); }
     ;
 instruction

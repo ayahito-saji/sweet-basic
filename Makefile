@@ -21,7 +21,7 @@ build: ./bin ./bin/parser.o ./bin/lexer.o ./bin/ast.o ./bin/main.o
 
 
 ./src/y.tab.c: ./src/parser.y
-	yacc -o ./src/y.tab.c -d ./src/parser.y
+	yacc -o ./src/y.tab.c -d ./src/parser.y -r all
 
 ./src/lex.yy.c: ./src/lexer.l
 	lex -t ./src/lexer.l > ./src/lex.yy.c
@@ -30,6 +30,7 @@ clean:
 	rm -rf ./bin/*.o
 	rm -rf ./src/lex.yy.c
 	rm -rf ./src/y.tab.*
+	rm -rf ./src/y.output
 
 test: ./bin/sbas
 	sh ./test/test.sh
