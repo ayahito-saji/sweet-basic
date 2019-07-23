@@ -6,7 +6,7 @@
   struct astnode {
     enum asttype type;
     int num;
-    char str[256];
+    char* str;
     struct astnode *left;
     struct astnode *right;
     unsigned int line;
