@@ -29,4 +29,8 @@ int yywrap(void) {
   yylval.node = astnode_num(temp);
   return LITERAL;
 }
+\"[^\"]*\" {
+  yylval.node = astnode_str(yytext);
+  return LITERAL;
+}
 %%

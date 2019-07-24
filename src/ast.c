@@ -48,6 +48,25 @@ struct astnode *astnode_num(double val) {
   }
 }
 
+struct astnode *astnode_str(char *val) {
+  int len = strlen(val);
+  if (len <= 256+2) {
+    struct astnode *p = (struct astnode*) malloc((int) sizeof(struct astnode));
+    char *str = (char *) malloc(sizeof(char) * 256+1);
+    strncpy(str, val+1, len-2 );
+    *(str+len-2) = '\0';
+    p->type = STRING;
+    p->child = NULL;
+    p->next = NULL;
+    p->str = str;
+    p->line = astline;
+    return p;
+  } else {
+    printf("String too long(%d)\n", astline);
+    exit(1);
+  }
+}
+
 void view_ast (struct astnode *tree, int indent) {
   char c, str[256];
   int i, len;
@@ -64,6 +83,9 @@ void view_ast (struct astnode *tree, int indent) {
         else { break; }
       }
       printf("%s(%d)\n", str, tree->line);
+      break;
+    case STRING:
+      printf("\"%s\"(%d)\n", tree->str, tree->line);
       break;
     case ADD:
       printf("+(%d)\n", tree->line);
