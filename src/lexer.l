@@ -16,6 +16,7 @@ int yywrap(void) {
 "\n" { return CR; }
 "(" { return '('; }
 ")" { return ')'; }
+"," { return ','; }
 ":" { return ':'; }
 [0-9]+ {
   double temp;
@@ -32,5 +33,9 @@ int yywrap(void) {
 \"[^\"]*\" {
   yylval.node = astnode_str(yytext);
   return LITERAL;
+}
+[_a-zA-Z][_a-zA-Z0-9]* {
+  yylval.node = astnode_sbl(yytext);
+  return IDENTIFIER;
 }
 %%

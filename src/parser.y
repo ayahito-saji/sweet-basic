@@ -11,9 +11,9 @@ extern struct astnode *root;
 %union {
   struct astnode *node;
 }
-%token <node> LITERAL
+%token <node> LITERAL IDENTIFIER
 %token <node> '+' '-' '*' '/' CR '(' ')' ':'
-%type <node> program statements statement instruction expression term primary_expression
+%type <node> program statements statement arguments instruction expression term primary_expression
 %%
 program
     : statements { $$ = astnode_new(PROGRAM); astnode_add($$, $1); root = $$; }
@@ -29,7 +29,12 @@ statement
     ;
 instruction
     : { $$ = NULL; }
-    | expression
+    | IDENTIFIER { $$ = astnode_new(INSTRUCTION); astnode_add($$, $1); }
+    | IDENTIFIER arguments { $$ = astnode_new(INSTRUCTION); astnode_add($$, $1); astnode_add($$, $2); }
+    ;
+arguments
+    : expression { $$ = astnode_new(ARGUMENTS);astnode_add($$, $1); }
+    | arguments ',' expression { astnode_add($1, $3); }
     ;
 expression
     : term
@@ -44,6 +49,7 @@ term
     ;
 primary_expression
     : LITERAL
+    | IDENTIFIER
     | '(' expression ')' { $$ = $2; }
     ;
 %%

@@ -53,9 +53,28 @@ struct astnode *astnode_str(char *val) {
   if (len <= 256+2) {
     struct astnode *p = (struct astnode*) malloc((int) sizeof(struct astnode));
     char *str = (char *) malloc(sizeof(char) * 256+1);
-    strncpy(str, val+1, len-2 );
+    strncpy(str, val+1, len-2);
     *(str+len-2) = '\0';
     p->type = STRING;
+    p->child = NULL;
+    p->next = NULL;
+    p->str = str;
+    p->line = astline;
+    return p;
+  } else {
+    printf("String too long(%d)\n", astline);
+    exit(1);
+  }
+}
+
+struct astnode *astnode_sbl(char *val) {
+  int len = strlen(val);
+  if (len <= 16) {
+    struct astnode *p = (struct astnode*) malloc((int) sizeof(struct astnode));
+    char *str = (char *) malloc(sizeof(char) * len+1);
+    strncpy(str, val, len);
+    *(str+len) = '\0';
+    p->type = SYMBOL;
     p->child = NULL;
     p->next = NULL;
     p->str = str;
@@ -87,6 +106,9 @@ void view_ast (struct astnode *tree, int indent) {
     case STRING:
       printf("\"%s\"(%d)\n", tree->str, tree->line);
       break;
+    case SYMBOL:
+      printf("%s(%d)\n", tree->str, tree->line);
+      break;
     case ADD:
       printf("+(%d)\n", tree->line);
       break;
@@ -98,6 +120,12 @@ void view_ast (struct astnode *tree, int indent) {
       break;
     case DIV:
       printf("/(%d)\n", tree->line);
+      break;
+    case ARGUMENTS:
+      printf("argv(%d)\n", tree->line);
+      break;
+    case INSTRUCTION:
+      printf("inst(%d)\n", tree->line);
       break;
     case STATEMENT:
       printf(":(%d)\n", tree->line);

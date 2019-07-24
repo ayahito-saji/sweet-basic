@@ -1,1 +1,1 @@
-"aaa"+"bb"*3
+PRINT "aaa"+"bb"*3
