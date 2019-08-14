@@ -2,6 +2,9 @@
 
 Sweet BASIC is a programming language being compatible with Smile BASIC 2.* (SmileBoom).
 
+## Require Environment
+* Ubuntu 16.04
+
 ## Require Software
 * gcc
 * make
@@ -18,7 +21,7 @@ $ make build
 $ make test
 ```
 
-# Use Vagrant
+## Use Vagrant
 If you installed vagrant, you can use Ubuntu 16.04 as virtual environment.
 Exec follow commands:
 
@@ -34,7 +37,7 @@ If you stop or pause development, you execute follow commands.
 $ vagrant halt
 ```
 
-# Use Docker
+## Use Docker
 If you installed docker and docker-compose, you can use Ubuntu 16.04 as virtual environment.
 Exec follow commands:
 ```
