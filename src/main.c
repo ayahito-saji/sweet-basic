@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "ast.h"
+#include "ir.h"
 #include "y.tab.h"
 #define VERSION "0.0.1"
 
@@ -45,7 +46,7 @@ int main(int argc, char **argv) {
     printf("Load failed\n");
     return 1;
   }
-  
+
   extern int yyparse(void);
   extern FILE *yyin;
 
@@ -55,6 +56,8 @@ int main(int argc, char **argv) {
     printf("Syntax error(%d)\n", astline);
     exit(1);
   }
+  fclose(fp);
+
   extern struct astnode *root;
   // printf("ルート:%p\n", root);
   if (!root) exit(1);
@@ -64,7 +67,7 @@ int main(int argc, char **argv) {
     view_ast(root, 0);
   }
 
-  fclose(fp);
+  struct irline *ir = ast2ir(root);
 
   return 0;
 }

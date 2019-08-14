@@ -1,7 +1,7 @@
 CC = cc
 
-build: ./bin ./bin/parser.o ./bin/lexer.o ./bin/ast.o ./bin/main.o
-	$(CC) -o ./bin/sbas ./bin/main.o ./bin/parser.o ./bin/lexer.o ./bin/ast.o -lm
+build: ./bin ./bin/parser.o ./bin/lexer.o ./bin/ast.o ./bin/main.o ./bin/ir.o
+	$(CC) -o ./bin/sbas ./bin/main.o ./bin/parser.o ./bin/lexer.o ./bin/ast.o ./bin/ir.o -lm
 
 ./bin:
 	mkdir ./bin
@@ -18,6 +18,8 @@ build: ./bin ./bin/parser.o ./bin/lexer.o ./bin/ast.o ./bin/main.o
 ./bin/ast.o: ./src/ast.c
 	$(CC) -c -O0 -o ./bin/ast.o ./src/ast.c
 
+./bin/ir.o: ./src/ir.c
+	$(CC) -c -O0 -o ./bin/ir.o ./src/ir.c
 
 
 ./src/y.tab.c: ./src/parser.y
